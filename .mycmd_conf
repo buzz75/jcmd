@@ -1,0 +1,90 @@
+# MYCMD config File
+
+# Setting your project home directory
+# Using "go" to project home directory
+# ex. $ go
+[core]
+project_home = /home/rd/jeff_li 
+
+# Setting your project directory
+[project]
+mg   = mango
+mu   = mu_jb
+d2   = da2_jb
+t2   = ta2_jb
+pd   = prada_jb
+a15  = a15_jb
+tool = tools
+
+log = ../test_log/
+co = ../../Dropbox/Acer/Codes
+co2 =../../Google\\ Drive
+# Setting your sub-directory
+# Using "go project sub-directory" to sub-directory
+# ex. $ go pm i2c
+[subdir]
+ker    = kernel
+i2c    = kernel/drivers/i2c
+uart   = kernel/drivers/tty/serial
+eeprom = kernel/drivers/misc/eeprom
+sc     = kernel/drivers/input/scalarexecutor
+
+# Setting your sub-directory for different project
+# First create section [xxx_dir]
+# Using "go project sub-directory" to sub-directory
+# ex. $ go project1 xxx
+# You also can set default option, if you have many project with same directory
+[out_dir]
+prefix = out/target/product
+a9 = a9
+a10 = a10
+a12 = a12
+pm = picasso_m
+pmf = picasso_mf
+pre-jb-pmf = picasso_mf
+pe = picasso_e
+pe2 = picasso_e2
+p1 = picasso
+vg = vangogh
+mg = mango
+d2 = da2
+t2 = ta2
+mu = manu
+pd = prada
+
+[mach_dir]
+prefix = kernel/arch/arm
+default = mach-tegra
+a9 = mach-msm
+
+# adb install file
+# Using "install name" to install apk in your device
+# ex. $ install log
+[install]
+i2c = /home/username/Test-Tools/I2C_StressTest/apk/CloseJohn_v3.2_Signed.apk
+log = /home/username/Test-Tools/AcerLogSetting_V3.9/AcerLogSetting_v3.9_Unsigned.apk
+
+# For flash
+# Using "flash" to burn your device
+# ex. $ flash fused t30 pm
+# $ flash fused t30 boot pm
+# $ flash t20
+# $ flash t30 system
+[fused]
+pm = 0xF5FF279B 0xF30908C1 0x63A8F8DA 0x98AFC7AA
+pmfCCC = 0xF5C6E9A8 0x426E48BE 0xB06C7A09 0xCF07ACCC
+pmfcd9 = 0x052B9831 0x858F2771 0x9CB717C6 0x0A7B0CD9
+vg@87 = 0x9339020C 0x84A51889 0xA9B5B3D7 0x8E94A600
+pe2_7B1 = 0xA3AD9B60 0x6D76BA87 0xD045210E 0x0D80F7B1
+da2_7 = 0x2E4215A0 0x8BA850A1 0xCFEFDC57 0x05B3A82B
+da2_12 = 0x9F458E34 0xAAD32118 0x99EDCCBB 0x02A751FF
+da2_pvt3 = 0x628935C7 0x8F6C9F7B 0x74E14C1D 0xC717C887
+da2_pvt9 = 0x83E4C173 0x2DA12BA8 0xEB56A06A 0x8284B082
+da2_pvt12 = 0xE3169591 0xF8372C4B 0x782BDCAD 0xF52F3295
+da2_pvt2_4 = 0x81569F06 0x2DF0801E 0xAB50DDFC 0x980cc075
+da2_pvt2_1 = 0xCBD06CB6 0x01291316 0x9C4F498C 0x97FB9971
+da2_pvt2_d = 0x6814FF75 0x2058CB96 0x60C27355 0xE06532CC
+ta2_1080 = 0xdf9810da 0xe37a26a4 0x2f47ad6b 0xc141eefe
+ta2_04E8 = 0xe83e3fad 0x234906a6 0x56468cbe 0xc5a38fdf
+ta2_24hql = 0x94d22000 0x9338cfb7 0x5f4e56cb 0x6c76879b
+
