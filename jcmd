@@ -1,0 +1,147 @@
+#!/usr/bin/python
+
+## @package mycmd
+#  easy to use my project
+#
+#  @author Holiday Hao <codediablos@gmail.com>
+#  @version
+
+
+import os
+import sys
+import time
+import threading
+import optparse
+import ConfigParser
+
+
+class MYCMD:
+    DEBUG_LEVEL = 0
+
+    EDITOR = 'vi'
+    HOME_DIR = os.environ['HOME']
+    config_file = HOME_DIR + '/jeff_py/.mycmd_conf'
+
+    MSG_USAGE = "ezg[ --config]"
+
+    config = ConfigParser.SafeConfigParser()
+
+    def __init__(self, argv):
+        """Do initial. Read config file, set parser option and get patition table from config file"""
+        self.config.read(self.config_file)
+
+        self.parser = optparse.OptionParser(self.MSG_USAGE)
+        self.parser.add_option('--debug', '-g', action='store_true', dest='debug', help="for debug",default=False)
+        self.parser.add_option('--config', action='store_true', dest='config', help="setting config file", default=False)
+        self.options, self.args = self.parser.parse_args(argv)
+
+
+    def ezg(self, param):
+        """Do go command"""
+        project_home = ''
+        project_dir = ''
+        project_sub_dir = self.sub_dir(param[0], param[1])
+
+        if self.config.has_option('core', 'project_home'):
+            project_home = self.config.get('core', 'project_home')
+
+        if self.config.has_option('project', param[0]):
+            project_dir = self.config.get('project', param[0])
+
+        if project_dir == '':
+            if project_sub_dir == '':
+                result = project_home
+            else:
+                result = project_sub_dir
+        else:
+            result = project_home + "/" + project_dir + "/" + project_sub_dir 
+
+        print result
+
+
+    def sub_dir(self, project_name, sub_name):
+        """Return subdir path
+
+        Keyword arguments:
+        project_name -- the project name
+        sub_name -- the subdir name
+
+        """
+        sub = ''
+        #This project is a path
+        #ex. go test
+        if self.config.has_option('subdir', project_name):
+            sub = self.config.get('subdir', project_name)
+        #Every project with Different path
+        #ex. go pm mach
+        elif self.config.has_section(sub_name + '_dir'):
+            prefix = ''
+            if self.config.has_option(sub_name + '_dir', 'prefix'):
+                prefix = self.config.get(sub_name + '_dir', 'prefix') + "/"
+
+            if self.config.has_option(sub_name + '_dir', project_name):
+                sub = prefix + self.config.get(sub_name + '_dir', project_name)
+            elif self.config.has_option(sub_name + '_dir', 'default'):
+                sub = prefix + self.config.get(sub_name + '_dir', 'default')
+            else:
+                sub = ''
+        #Every project with Same path
+        #ex. go pm i2c
+        elif self.config.has_option('subdir', sub_name):
+            sub = self.config.get('subdir', sub_name)
+        else:
+            sub = ''
+
+        return sub
+
+    def ezg_completion(self, param):
+        """For bash completion (using tab)"""
+        if(param[0] == 'subdir'):
+            for k, v in self.config.items('subdir'):
+                print k
+            for section in self.config.sections():
+                if not section.find('_dir') == -1:
+                    print section.replace('_dir', '')
+        else:
+            for k, v in self.config.items('project'):
+                print k
+    def configure(self):
+        """Open config file"""
+        self.open_editor(self.config_file)
+
+    def open_editor(self, edit_file):
+        """Open config file use default editor"""
+        try:
+            self.EDITOR = os.environ['EDITOR']
+        except:
+            pass
+
+        self.excute_cmd(self.EDITOR + " " + edit_file, 3)
+
+    def excute_cmd(self, cmd, level):
+        """Excute commnad or not excute only print command by level"""
+        if self.DEBUG_LEVEL < level:
+            os.system(cmd)
+        else:
+            print cmd
+
+
+def main():
+    """Parse input command and run the command"""
+    command = sys.argv[1]
+    mycmd = MYCMD(sys.argv[2:])
+
+    if mycmd.options.debug:
+        mycmd.enable_debug(1)
+
+    if mycmd.options.config:
+        mycmd.configure()
+        return
+
+    reval = {
+        'ezg': lambda x: mycmd.ezg(x),
+        'ezg_completion': lambda x: mycmd.ezg_completion(x),
+        }[command](mycmd.args)
+
+if __name__ == '__main__':
+    main()

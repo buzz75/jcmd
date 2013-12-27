@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+#  Completion for mycmd:
+#
+#
+
+function ezg
+{
+    cd $(jcmd "ezg" "$1" "$2")
+}
+
+_ezg()
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    first=$(jcmd "ezg_completion" "")
+    second=$(jcmd "ezg_completion" "subdir")
+
+    case "${prev}" in
+        ezg)
+            COMPREPLY=( $(compgen -W "${first}" ${cur}) )
+            return 0
+            ;;
+        *)
+            COMPREPLY=( $(compgen -W "${second}" ${cur}) )
+            return 0
+            ;;
+    esac
+
+#    COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+}
+complete -F _ezg ezg
