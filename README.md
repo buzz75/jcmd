@@ -73,5 +73,6 @@ you can use `ezg a9 mach`, change directory to /home/username/project/a9/kernel/
 prefix = kernel/arch/arm  
 default = mach-tegra  
 a9 = mach-msm  
+jeff teste bf here
 </code></pre>
 
